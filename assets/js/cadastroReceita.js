@@ -128,7 +128,7 @@
       };
 
       // Ajuste a URL conforme o endpoint que seu backend espera
-      const apiUrl = '/api/cadastroReceitas';
+      const apiUrl = 'http://10.107.134.31:8080/v1/controle-receitas/usuario/';
 
       fetch(apiUrl, {
         method: 'POST',

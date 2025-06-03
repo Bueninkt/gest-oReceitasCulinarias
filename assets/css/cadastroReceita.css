@@ -234,15 +234,11 @@ p {
   color: #fff;
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 24px;
 }
 
 /* Cada “fieldset” do formulário */
-.field-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
+
 
 .field-label {
   font-weight: 800;
@@ -257,7 +253,7 @@ p {
   width: 100%;
   background: transparent;
   border: none;
-  border-bottom: 1px solid #fff;
+  border-bottom: 1px solid #ffffff56;
   padding: 8px 4px;
   font-size: 1rem;
   color: #fff;
@@ -270,7 +266,7 @@ p {
 }
 
 .field-group textarea {
-  min-height: 80px;
+  min-height: 30px;
   line-height: 1.4;
 }
 
