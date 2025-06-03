@@ -123,7 +123,7 @@ form.addEventListener('submit', async (event) => {
         localStorage.setItem('user', JSON.stringify(data.user))
         localStorage.setItem('userId', data.user.id)
 
-        window.location.href = './pages/home.html'
+        window.location.href = './pages/cadastroReceita.html'
 
     } catch (error) {
         errorMessage.textContent = error.message

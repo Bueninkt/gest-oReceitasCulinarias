@@ -22,7 +22,7 @@ html, body {
   /* Agora o fundo é um gradiente preto semitransparente sobre a imagem */
   background: 
     linear-gradient(
-      rgba(0, 0, 0, 0.144),  /* 60% de opacidade; ajuste para mais (ex: 0.7) ou menos (ex: 0.4) */
+      rgba(139, 51, 51, 0.144),  /* 60% de opacidade; ajuste para mais (ex: 0.7) ou menos (ex: 0.4) */
       rgba(0, 0, 0, 0.274)
     ),
     url('/assets/img/background001.png') no-repeat center center;
