@@ -19,10 +19,16 @@
 html, body {
   height: 100%;
   font-family: Arial, sans-serif;
-  /* Background geral (madeira) */
-  background: url('/assets/img/background001.png') no-repeat center center;
+  /* Agora o fundo é um gradiente preto semitransparente sobre a imagem */
+  background: 
+    linear-gradient(
+      rgba(0, 0, 0, 0.144),  /* 60% de opacidade; ajuste para mais (ex: 0.7) ou menos (ex: 0.4) */
+      rgba(0, 0, 0, 0.274)
+    ),
+    url('/assets/img/background001.png') no-repeat center center;
   background-size: cover;
 }
+
 
 /* Parágrafo genérico utilizados em placeholders / estado padrão */
 p {
@@ -35,7 +41,7 @@ p {
 ----------------------------------------------------- */
 .site-header {
   height: 60px;
-  background: rgba(166, 143, 97, 0.95); /* leve transparência para mostrar o fundo de madeira abaixo */
+  background: #d8ba67ec; /* leve transparência para mostrar o fundo de madeira abaixo */
   display: flex;
   align-items: center;
   padding: 0 20px;
@@ -109,7 +115,7 @@ p {
 ----------------------------------------------------- */
 .sidebar {
   flex: 0 0 20%;
-  color: #000;
+  
 }
 
 .sidebar h2 {
