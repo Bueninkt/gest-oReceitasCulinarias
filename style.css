@@ -1,0 +1,198 @@
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Acme&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-image: url(/assets/img/background001.png);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #2415087b;
+    border-radius: 30px;
+    padding: 50px 40px;
+    width: 540px;
+    backdrop-filter: blur(0.7px);
+    box-shadow: 0 0 60px #ffe89d77;
+    border: 3px solid #F8FFF6 ;
+}
+
+
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+img{
+    display: flex;
+    max-width: 100px;
+    max-height: 150px;
+    position: absolute ;
+    left: 23px;
+    top: 30px;
+}
+h3{
+    font-size: 15px;
+    color: #FFDF87;
+    text-align: center;
+    margin-bottom: 33px;
+    font-family: 'Anton SC', sans-serif;
+    font-weight: 700;
+}
+
+
+h2 {
+    font-size: 30px;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+p {
+    color: #ffffff;
+    text-align: end;
+    font-size: 14px;
+    margin-bottom: 23px;
+    font-family: 'Urbanist', sans-serif;
+    font-weight: 800;
+}
+
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+
+.input-group {
+    position: relative;
+    width: 100%;
+}
+
+input {
+    width: 100%;
+    padding: 14px 18px;
+    background: #715f3e35;
+    color: #ffffff;
+    border-radius: 30px;
+    font-size: 20px;
+    outline: none;
+    backdrop-filter: blur(1.05px);
+    transition: 0.3s;
+    border: 2px solid #715f3e32;
+}
+
+input::placeholder {
+    color: transparent;
+}
+
+.input-group label {
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+    color: #aaa;
+    pointer-events: none;
+    transition: 0.3s ease;
+    font-size: 20px;
+}
+
+input:focus + label,
+input:not(:placeholder-shown) + label {
+    top: 0;
+    left: 15px;
+    font-size: 14px;
+    color: #ffffff;
+    background-color: #dfdfdf02;
+    padding: 0 6px;
+    border-radius: 8px;
+}
+
+button {
+    margin-top: 35px;
+    padding: 14px;
+    border: none;
+    border-radius: 30px;
+    font-size: 24px;
+    background: linear-gradient(135deg, #FFE89D, #fde595);
+    color: #3F0A13;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px #ffe89da0;
+    height: 58px;
+}
+
+
+button:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 20px #FFE89D;
+}
+
+.remember-forgot {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 13px;
+    color: #ccc;
+    text-decoration: none;
+    font-family: 'Acme', sans-serif;
+    
+    
+}
+
+
+.remember-forgot a:hover {
+    text-decoration: underline;
+}
+
+.login-section p:last-child {
+    font-size: 15px;
+    margin-top: 70px;
+    color: #ffffff;
+    text-align: center;
+}
+
+.login-section p {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.login-section a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.login-section .cadastro {
+    color: #7BFF53;
+    text-decoration: none;
+}
+.login-section .cadastro:hover {
+    color: #7BFF53;
+    text-decoration: underline;
+}
+
+
+.error-message {
+    color: #ff0000;
+    text-align: center;
+    font-size: 14px;
+}

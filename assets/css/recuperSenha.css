@@ -1,0 +1,120 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-image: url(../img/background001.png);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    padding: 40px;
+    background-color: rgba(48, 34, 22, 0.74);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    border: 3px solid rgba(194, 193, 193, 0.781);
+    border-radius: 30px;
+    max-width: 680px;
+    height: 430px;
+    width: 100%;
+}
+
+.recuperar-section {
+    width: 100%;
+    padding: 20px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+h2 {
+    font-size: 36px;
+    color: #ffffff;
+    margin-bottom: 3px;
+    font-weight: 700;
+    text-align: center;
+}
+
+p {
+    font-size: 16px;
+    color: #FFDF87;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.form-step {
+    display: none;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-step.active {
+    display: flex;
+    margin-bottom: 36px;
+}
+
+label {
+    font-weight: 500;
+    font-size: 14px;
+    color: #e0e0e0ee;
+    margin-top: 25px;
+    margin-bottom: 5px;
+}
+
+input {
+    padding: 14px 18px;
+    border-radius: 20px;
+    border: 0.5px solid #c4b790;
+    color: rgba(255, 255, 255, 0.87);
+    font-size: 15px;
+    background-color: #ffffff00;
+    transition: border 0.3s;
+}
+
+
+input:focus {
+    outline: none;
+    border-color: #ffffff;
+}
+
+button {
+    background-color: #f5c84c;
+    color: #000000;
+    border: none;
+    padding: 14px;
+    border-radius: 25px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover {
+    background-color: #ffbb00;
+    transform: scale(1.02);
+}
+
+button:disabled {
+    background-color: #d3d3d3;
+    cursor: not-allowed;
+}
+
+.error-message {
+    color: #d32f2f;
+    font-size: 13px;
+    padding-left: 10px;
+}
+
+.success-message {
+    color: #388e3c;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 10px;
+}

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Cadastro de Receitas</title>
+  <!-- Fonte Anton (já importada) para títulos -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&display=swap" />
+  <!-- CSS mesclado das duas telas -->
+  <link rel="stylesheet" href="/assets/css/cadastroReceita.css" />
+  <!-- Ícones do Material Icons para upload e usuário -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+</head>
+<body>
+  <!-- ======== HEADER ======== -->
+  <header class="site-header">
+    <img src="/assets/img/logoPreto.png" alt="logo Preta" class="logo" />
+    <div class="search-container">
+      <input type="text" placeholder="Pesquisar por uma receita, ingredientes" />
+    </div>
+    <nav class="main-nav">
+      <a href="#">Ver Receitas:</a>
+      <a href="#" class="active">Cadastrar Receitas:</a>
+    </nav>
+    <div class="user-icon">
+      <span class="material-icons">account_circle</span>
+    </div>
+  </header>
+
+  <!-- ======== CONTEÚDO PRINCIPAL ======== -->
+  <main class="main-content">
+    
+    <!-- ======== SIDEBAR (Filtros + Upload de Imagem) ======== -->
+    <aside class="sidebar">
+      <h2>Cadastre os Filtros</h2>
+
+      <!-- Categorias -->
+      <details class="filter-detail">
+        <summary>Categorias</summary>
+        <div class="filter-options">
+          <label><input type="radio" name="category" value="sobremesas" /> Sobremesas</label>
+          <label><input type="radio" name="category" value="doces"      /> Doces</label>
+          <label><input type="radio" name="category" value="salgados"   /> Salgados</label>
+        </div>
+      </details>
+
+      <!-- Nível de Dificuldade -->
+      <details class="filter-detail">
+        <summary>Nível de Dificuldade</summary>
+        <div class="filter-options">
+          <label><input type="radio" name="difficulty" value="facil"  /> Fácil</label>
+          <label><input type="radio" name="difficulty" value="medio"  /> Médio</label>
+          <label><input type="radio" name="difficulty" value="dificil"/> Difícil</label>
+        </div>
+      </details>
+
+      <!-- Porções -->
+      <details class="filter-detail">
+        <summary>Porções</summary>
+        <div class="filter-options">
+          <input
+            type="number"
+            id="porcoes-input"
+            placeholder="Número de porções"
+            min="1"
+          />
+        </div>
+      </details>
+
+      <!-- Upload de Imagem -->
+      <div class="upload-container" id="image-preview">
+        <!-- O input ocupa todo o container e é invisível -->
+        <input type="file" id="image-input" accept="image/*" />
+        <div class="upload-placeholder">
+          <span class="material-icons">add_photo_alternate</span>
+          <p>Coloque a foto da Sua Receita</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ======== PAINEL DE FORMULÁRIO ======== -->
+    <section class="form-panel">
+      <!-- Título da Receita -->
+      <div class="field-group">
+        <label for="recipe-title" class="field-label">Nome da sua receita:</label>
+        <input
+          type="text"
+          id="recipe-title"
+          placeholder="Digite o nome da sua receita"
+        />
+      </div>
+
+      <!-- Descrição Breve -->
+      <div class="field-group">
+        <label for="descricao" class="field-label">Descrição:</label>
+        <textarea
+          id="descricao"
+          placeholder="Adicione uma breve descrição ao final para sua receita"
+        ></textarea>
+      </div>
+
+      <!-- Ingredientes -->
+      <div class="field-group">
+        <label for="ingredients" class="field-label">Ingredientes:</label>
+        <textarea
+          id="ingredients"
+          placeholder="Adicione seus ingredientes"
+        ></textarea>
+      </div>
+
+      <!-- Modo de Preparo -->
+      <div class="field-group">
+        <label for="preparation" class="field-label">Modo de Preparo:</label>
+        <textarea
+          id="preparation"
+          placeholder="Adicione seu modo de preparo"
+        ></textarea>
+      </div>
+
+      <!-- Botão Concluir -->
+      <button id="concluir-btn" type="button">Concluir</button>
+    </section>
+  </main>
+
+  <!-- Caso você já tenha um cadastroReceita.js, basta mantê-lo -->
+  <script src="/assets/js/cadastroReceita.js"></script>
+</body>
+</html>
