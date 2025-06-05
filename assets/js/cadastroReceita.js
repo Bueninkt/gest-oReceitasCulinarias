@@ -1,23 +1,19 @@
 'use strict';
 
 // URLs da API
-const BASE_URL         = 'http://10.107.134.31:8080/v1/controle-receitas';
-const CATEGORIAS_URL   = `${BASE_URL}/categoria`;
-const DIFICULDADES_URL = `${BASE_URL}/nivelDificuldade`;
-const RECEITA_URL      = `${BASE_URL}/receita`;
+const BASE_URL           = 'http://10.107.144.3:8080/v1/controle-receitas';
+const RECEITA_URL        = `${BASE_URL}/receita`;
+const CATEGORIAS_URL     = `${BASE_URL}/categoria`;
+const DIFICULDADES_URL   = `${BASE_URL}/nivelDificuldade`;
 
 // Configuração do Azure Blob Storage
-const AZURE_ACCOUNT   = 'uploadreceita';
-const AZURE_CONTAINER = 'fotos'; // Ajuste para o nome exato do seu container no Azure
-const SAS_TOKEN       = 'sp=racwl&st=2025-06-03T18:39:57Z&se=2025-07-03T02:39:57Z&sv=2024-11-04&sr=c&sig=eiTLG0XfiGvXKR0Kn3zpFI8ATkPQ33cjV%2Bywkqrt%2Fm0%3D';
-
-// Chave usada em localStorage para armazenar a URL da última imagem enviada
-const STORAGE_KEY_IMAGEM_URL = 'ultimaImagemUrl';
+const AZURE_ACCOUNT  = 'receitaimage';
+const AZURE_CONTAINER = 'receita'; // ajuste para o nome exato do seu container
+const SAS_TOKEN      = 'sp=racwl&st=2025-06-05T11:50:33Z&se=2025-06-19T19:50:33Z&sv=2024-11-04&sr=c&sig=YD7pztXy2gRqOi2vBbqC%2BFcfw5DXkUOHTD5yV8tX1hw%3D';
 
 
-const userId = localStorage.getItem('userId');
+  const userId = localStorage.getItem('userId');
   if (!userId) {
-    // Se não houver usuário logado, redireciona para a página de login
     window.location.href = '../index.html';
     return;
   }
@@ -29,7 +25,7 @@ const userId = localStorage.getItem('userId');
 
 
 /**
- * Busca categorias no back-end e popula o primeiro <details>
+ * 1) Carrega categorias do back-end e preenche o primeiro <details>
  */
 async function carregarCategorias() {
   try {
@@ -40,8 +36,7 @@ async function carregarCategorias() {
     const container = document.querySelector(
       '.filter-detail:nth-of-type(1) .filter-options'
     );
-    container.innerHTML = ''; // limpa opções estáticas
-
+    container.innerHTML = '';
     categorias.forEach(cat => {
       const label = document.createElement('label');
       label.innerHTML = `
@@ -59,19 +54,18 @@ async function carregarCategorias() {
 }
 
 /**
- * Busca níveis de dificuldade no back-end e popula o segundo <details>
+ * 2) Carrega níveis de dificuldade e preenche o segundo <details>
  */
 async function carregarDificuldades() {
   try {
     const resp = await fetch(DIFICULDADES_URL);
-    if (!resp.ok) throw new Error('Erro ao carregar níveis de dificuldade');
+    if (!resp.ok) throw new Error('Erro ao carregar dificuldades');
     const niveis = await resp.json();
 
     const container = document.querySelector(
       '.filter-detail:nth-of-type(2) .filter-options'
     );
-    container.innerHTML = ''; // limpa opções estáticas
-
+    container.innerHTML = '';
     niveis.forEach(niv => {
       const label = document.createElement('label');
       label.innerHTML = `
@@ -89,11 +83,11 @@ async function carregarDificuldades() {
 }
 
 /**
- * Configura o fluxo de upload da imagem para o Azure e armazena a URL em localStorage.
- * userId é usado para gerar um nome de blob único.
+ * 3) Configura o fluxo de upload da imagem para o Azure e, logo em seguida,
+ *    dispara automaticamente o envio da URL ao back-end assim que o blob está OK.
  */
 function configurarUploadImagem(userId) {
-  const imageInput       = document.getElementById('image-input');
+  const imageInput      = document.getElementById('image-input');
   const previewContainer = document.getElementById('image-preview');
   const placeholder      = previewContainer.querySelector('.upload-placeholder');
 
@@ -102,37 +96,39 @@ function configurarUploadImagem(userId) {
     if (!file) return;
 
     try {
-      // Faz o upload ao Azure e obtém a URL pública
+      // 3.1) Envia o arquivo ao Azure e recebe a URL pública de acesso
       const blobUrl = await uploadParaAzure(file, userId);
 
-      // Armazena a URL no localStorage para uso posterior
-      localStorage.setItem(STORAGE_KEY_IMAGEM_URL, blobUrl);
-
-      // Exibe preview da imagem no container
+      // 3.2) Remove o placeholder e insere preview
       previewContainer.style.backgroundImage = `url('${blobUrl}')`;
       placeholder.style.display = 'none';
+
+      // 3.3) Assim que tiver a URL, dispara o envio parcial ao back-end:
+      await enviarImagemAoBackend(blobUrl, userId);
+
+      // Opcional: exiba alguma mensagem de sucesso visual
+      console.log('Imagem enviada e URL registrada no back-end:', blobUrl);
     } catch (e) {
-      console.error('Falha no upload:', e);
+      console.error('Falha no upload ou no envio da URL ao back-end:', e);
       placeholder.textContent = 'Erro ao enviar imagem';
     }
   });
 }
 
 /**
- * Envia o arquivo binário ao Azure Blob e retorna a URL pública do blob.
+ * 3.1) Função que faz PUT direto no Azure Blob Storage e retorna a URL pública.
  */
 async function uploadParaAzure(file, userId) {
-  // Gera um nome único para o blob: userId_timestamp_nomeOriginal
+  // Gera um nome único: <userId>_<timestamp>_<nomeOriginal>
   const timestamp = Date.now();
   const blobName  = `${userId}_${timestamp}_${file.name}`;
-
   const uploadUrl = `https://${AZURE_ACCOUNT}.blob.core.windows.net/${AZURE_CONTAINER}/${blobName}?${SAS_TOKEN}`;
 
   const resposta = await fetch(uploadUrl, {
     method: 'PUT',
     headers: {
       'x-ms-blob-type': 'BlockBlob',
-      'Content-Type': file.type
+      'Content-Type':     file.type
     },
     body: file
   });
@@ -141,36 +137,85 @@ async function uploadParaAzure(file, userId) {
     throw new Error(`Azure retornou status ${resposta.status}`);
   }
 
-  // Retorna a URL pública sem SAS token
+  // Retorna a URL pública (sem SAS Token)
   return `https://${AZURE_ACCOUNT}.blob.core.windows.net/${AZURE_CONTAINER}/${blobName}`;
 }
 
 /**
- * Configura o botão “Concluir”: reúne todos os campos, a URL da imagem do localStorage
- * e envia o payload completo para o endpoint de criar receita.
+ * 3.3) Assim que a imagem chegar no Azure, enviamos a URL ao back-end.
+ *      Aqui assumimos que existe um endpoint no back-end capaz de 
+ *      receber apenas { usuarioId, imagemUrl }.
+ * 
+ *      Se o seu back-end não tiver um endpoint específico para “imagem só”,
+ *      você pode criar algo como POST /receita/imagem que registre a URL
+ *      em algum lugar (ou em uma tabela temporária), e depois o usuário 
+ *      preenche o restante (título, ingredientes, etc).
+ */
+async function enviarImagemAoBackend(imagemUrl, userId) {
+  // Exemplo de um endpoint dedicado somente para receber imagemUrl:
+  const URL_UPLOAD_IMAGEM = `${RECEITA_URL}/imagem`; 
+  // (Ajuste para o caminho real que o seu back-end estiver esperando.)
+
+  const resp = await fetch(URL_UPLOAD_IMAGEM, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      // Se o back-end exigir token:
+      // Authorization: `Bearer ${localStorage.getItem('token')}`
+    },
+    body: JSON.stringify({
+      usuarioId: Number(userId),
+      imagemUrl: imagemUrl
+    })
+  });
+
+  if (!resp.ok) {
+    const errorData = await resp.json();
+    throw new Error(errorData.message || 'Falha ao registrar URL da imagem');
+  }
+
+  return await resp.json();
+}
+
+/**
+ * 4) Configura o botão “Concluir” para, ao ser clicado, coletar todos os dados
+ *    (inclusive a imagem que já foi enviada antes), e então criar a receita completa.
  */
 function configurarEnvioReceita(userId) {
   const btnConcluir = document.getElementById('concluir-btn');
 
   btnConcluir.addEventListener('click', async () => {
-    const titulo       = document.getElementById('recipe-title').value.trim();
-    const descricao    = document.getElementById('descricao').value.trim();
-    const ingredientes = document.getElementById('ingredients').value.trim();
+    const titulo      = document.getElementById('recipe-title').value.trim();
+    const descricao   = document.getElementById('descricao').value.trim();
+    const ingredientes= document.getElementById('ingredients').value.trim();
     const modoPreparo  = document.getElementById('preparation').value.trim();
     const porcoes      = Number(document.getElementById('porcoes-input').value);
 
     const categoriaRadio   = document.querySelector('input[name="category"]:checked');
     const dificuldadeRadio = document.querySelector('input[name="difficulty"]:checked');
 
-    // Recupera a URL da última imagem enviada ao Azure (se existir)
-    const imagemUrl = localStorage.getItem(STORAGE_KEY_IMAGEM_URL) || '';
+    // Supondo que, quando chamamos enviarImagemAoBackend(), o back-end tenha salvo
+    // a imagem em uma tabela temporária e retornado algo como { imagemUrl: '...' } 
+    // ou que, ao menos, a URL já esteja em alguma variável global/localStorage.
+    // Se você preferir, também pode guardar em localStorage logo após o envio de imagem:
+    //
+    //   localStorage.setItem('ultimaImagemUrl', imagemUrl);
+    //
+    // e então aqui fazer:
+    //   const imagemUrl = localStorage.getItem('ultimaImagemUrl');
+    //
+    // Para simplificar, vamos supor que o endpoint /receita/imagem retornou:
+    //   { imagemUrl: 'https://...blob.core.windows.net/...jpg' } 
+    // e que esse JSON foi salvo em localStorage ou variável.
+
+    const imagemUrl = localStorage.getItem('ultimaImagemUrl') || '';
 
     // Validações mínimas
     if (
-      !titulo        ||
-      !descricao     ||
-      !ingredientes  ||
-      !modoPreparo   ||
+      !titulo   ||
+      !descricao||
+      !ingredientes ||
+      !modoPreparo ||
       !categoriaRadio ||
       !dificuldadeRadio ||
       !porcoes
@@ -179,7 +224,6 @@ function configurarEnvioReceita(userId) {
       return;
     }
 
-    // Monta o objeto a ser enviado
     const receitaPayload = {
       titulo,
       descricao,
@@ -189,7 +233,7 @@ function configurarEnvioReceita(userId) {
       categoriaId: Number(categoriaRadio.value),
       nivelDificuldadeId: Number(dificuldadeRadio.value),
       usuarioId: Number(userId),
-      imagemUrl // já está disponível no localStorage
+      imagemUrl // Já disponível porque gravamos após o upload ao Azure
     };
 
     try {
@@ -208,9 +252,7 @@ function configurarEnvioReceita(userId) {
         throw new Error(data.message || 'Erro ao cadastrar receita');
       }
       alert('Receita cadastrada com sucesso!');
-      // Opcional: limpar localStorage ou campos após sucesso
-      localStorage.removeItem(STORAGE_KEY_IMAGEM_URL);
-      // Aqui você pode limpar campos ou redirecionar, se quiser
+      // Opcional: redirecionar ou limpar campos
     } catch (e) {
       console.error(e);
       alert(`Falha ao cadastrar receita: ${e.message}`);

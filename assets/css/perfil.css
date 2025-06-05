@@ -1,0 +1,268 @@
+@import url("https://fonts.googleapis.com/css2?family=Anton&display=swap");
+
+
+/* Reset e base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+height: 100%;
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+color: #f8f8f8;
+background: 
+    linear-gradient(
+      rgba(0, 0, 0, 0.1),  /* 60% de opacidade; ajuste para mais (ex: 0.7) ou menos (ex: 0.4) */
+      rgba(0, 0, 0, 0)
+    ),
+    url('/assets/img/background001.png') no-repeat center center;
+}
+
+.site-header {
+  height: 60px;
+  background: #d8ba67ec; /* leve transparência para mostrar o fundo de madeira abaixo */
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.site-header .logo {
+  max-width: 60px;
+  max-height: 50px;
+  margin-right: 12px;
+}
+
+.search-container {
+  flex: 1;
+  margin: 0 30px;
+}
+
+.search-container input {
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  background: #8e7f5c;
+  color: #fff;
+}
+
+.search-container input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.material-icons {
+  /* Usado nos ícones de usuário e upload */
+  font-size: 1.8rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.main-nav {
+  display: flex;
+}
+
+.main-nav a {
+  margin-left: 20px;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: normal;
+  font-family: 'Anton', sans-serif; /* aplica Anton nos links para destacar */
+  font-size: 0.9rem;
+}
+
+.main-nav a.active {
+  color: #3a2510;
+  font-weight: bold;
+}
+
+.user-icon {
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+/* -----------------------------------------------------
+   LAYOUT PRINCIPAL
+----------------------------------------------------- */
+.main-content {
+  display: flex;
+  padding: 30px;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+
+/* Perfil */
+.profile-header {
+  display: flex;
+  align-items: center;
+  padding: 24px;
+  border: 1px solid white;
+  background: #00000055;
+  max-width: 935px;
+  margin: 40px auto;
+  border-radius: 8px;
+}
+
+.profile-image {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin-right: 32px;
+}
+
+.profile-image img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #ffffffa0;
+}
+
+.profile-image input[type="file"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.profile-details {
+  flex: 4;
+}
+
+.profile-username-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.profile-username-row h1 {
+  font-size: 28px;
+  font-weight: 300;
+}
+
+
+#editBtn{
+  border: 1px solid #313131;
+  background: #ffffff;
+  border-radius: 4px;
+  padding: 5px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+#edit-btn:hover{
+  background: #fafafa;
+}
+
+#resetImgBtn{
+  border: 1px solid #313131;
+  background: #ffffff;
+  border-radius: 4px;
+  padding: 5px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+#resetProfileBtn{
+  display: block;
+  position: relative;
+  top: 127px;
+  left: 205px;
+  border: 1px solid #313131;
+  background: #ffffff;
+  border-radius: 4px;
+  padding: 5px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+
+
+.stats-list {
+  display: flex;
+  gap: 40px;
+  list-style: none;
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+
+.stats-list li span {
+  font-weight: 600;
+}
+
+.profile-bio {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.profile-bio span {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.profile-header.editing .editable {
+  outline: 1px dashed #999;
+  padding: 2px 4px;
+  background: #fff;
+  color: #262626;
+}
+
+
+/* =================RECEITAS======================= */
+
+
+.receita-main{
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.302);
+    border-radius: 7px;
+    border: 2px solid white;
+    width: 932px;
+    animation: fadeIn 1s ease-in-out;
+}
+
+h2 {
+    font-size: 30px;
+    color: #fff;
+    text-align: start;
+    margin-bottom: 17px;
+    margin-left: 40px;
+    margin-top: 19px;
+
+}
+
+ver-mais {
+  width: 100px;
+  border: 1px solid #ffffffef;
+  color: black;
+  position: right;
+  background: #ffffff;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.submit{
+    display: flex;
+    width: 100%;
+    justify-content: end;
+    background-color: #ffffffea;
+}
+
+
