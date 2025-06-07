@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Perfil</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/perfil.css"/>
+</head>
+<body>
+  <!-- Navbar padrão da Home -->
+ <header class="site-header">
+    <img src="/assets/img/logoPreto.png" alt="logo Preta" class="logo" />
+    <div class="search-container">
+      <input type="text" placeholder="Pesquisar por uma receita, ingredientes" />
+    </div>
+    <nav class="main-nav">
+      <a href="#">Ver Receitas:</a>
+      <a href="./cadastroReceita.html" class="active">Cadastrar Receitas:</a>
+    </nav>
+    <div class="user-icon">
+      <span class="material-icons">account_circle</span>
+    </div>
+  </header>
+
+  <main class="profile-header">
+    <div class="profile-image">
+      <img id="profilePic" src="../assets/img/avatar.png" alt="Avatar"/>
+      <input type="file" accept="image/*" onchange="previewProfilePic(event)" title="Alterar foto"/>
+    </div>
+    <div class="profile-details">
+      <div class="profile-username-row">
+        <h1 class="editable" id="profileUsername">seuusuario</h1>
+        <button class="edit-btn" id="editBtn">Editar Perfil</button>
+        <button class="reset-btn" id="resetImgBtn">Redefinir Imagem</button>
+        <button class="reset-btn" id="resetProfileBtn">Redefinir Perfil</button>
+      </div>
+      <ul class="stats-list">
+        <li><span id="postsCount">0</span> publicações</li>
+      </ul>
+      <div class="profile-bio">
+        <span class="editable" id="profileName">Seu Nome</span>
+        <p class="editable" id="profileBio">conte um pouco sobre você!</p>
+      </div>
+    </div>
+  </main>
+
+  <main class="receita-main">
+     
+  </main>
+
+
+  <script src="../assets/js/perfil.js"></script>
+</body>
+</html>
