@@ -2,122 +2,130 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>Cadastrar Receitas</title>
-  <link rel="shortcut icon" href="/assets/img/Logo.png" type="image/x-icon">
-  <!-- Fonte Anton (já importada) para títulos -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&display=swap" />
-  <!-- CSS mesclado das duas telas -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cadastro de Receitas</title>
+
+  <!-- Anton SC -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Anton+SC&display=swap"
+    rel="stylesheet"
+  />
   <link rel="stylesheet" href="/assets/css/cadastroReceita.css" />
-  <!-- Ícones do Material Icons para upload e usuário -->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 </head>
 <body>
-  <!-- ======== HEADER ======== -->
-  <header class="site-header">
-    <img src="/assets/img/logoPreto.png" alt="logo Preta" class="logo" />
-    <div class="search-container">
-      <input type="text" placeholder="Pesquisar por uma receita, ingredientes" />
-    </div>
-    <nav class="main-nav">
-      <a href="#">Ver Receitas:</a>
-      <a href="./cadastroReceita.html" class="active">Cadastrar Receitas:</a>
+
+  <!-- NAVBAR 100% igual ao seu mock -->
+  <header id="top-nav">
+    <img
+      src="/assets/img/logoPreto.png"
+      alt="Logo Sabor Gourmet"
+      class="logo"
+    />
+
+    <input
+      type="text"
+      class="search-input"
+      placeholder="Pesquisar por uma receita"
+    />
+
+    <nav class="nav-links">
+      <span class="nav-ver">VER RECEITAS:</span>
+      <span class="nav-cadastro">CADASTRAR RECEITAS:</span>
+      <img
+        src="assets/img/profile_default.png"
+        alt="Ícone usuário"
+        class="profile-icon"
+      />
     </nav>
-    <div class="user-icon">
-      <span class="material-icons">account_circle</span>
-    </div>
   </header>
 
-  <!-- ======== CONTEÚDO PRINCIPAL ======== -->
-  <main class="main-content">
-    
-    <!-- ======== SIDEBAR (Filtros + Upload de Imagem) ======== -->
-    <aside class="sidebar">
-      <h2>Cadastre os Filtros</h2>
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="cadastro-container">
 
-      <!-- Categorias -->
+    <!-- FILTROS + UPLOAD -->
+    <aside class="filters-panel">
+      <h2>CADASTRE OS FILTROS</h2>
+
       <details class="filter-detail">
         <summary>Categorias</summary>
         <div class="filter-options">
+          <!-- JS popula aqui -->
         </div>
       </details>
 
-      <!-- Nível de Dificuldade -->
       <details class="filter-detail">
         <summary>Nível de Dificuldade</summary>
         <div class="filter-options">
+          <!-- JS popula aqui -->
         </div>
       </details>
 
-      <!-- Porções -->
       <details class="filter-detail">
         <summary>Porções</summary>
         <div class="filter-options">
           <input
             type="number"
             id="porcoes-input"
-            placeholder="Número de porções"
             min="1"
+            placeholder="Qtd. de porções"
           />
         </div>
       </details>
 
-      <!-- Upload de Imagem -->
-      <div class="upload-container" id="image-preview">
-        <!-- O input ocupa todo o container e é invisível -->
-        <input type="file" id="image-input" accept="image/*" />
+      <label id="image-preview" for="image-input">
         <div class="upload-placeholder">
-          <span class="material-icons">add_photo_alternate</span>
+          <span class="plus">+</span>
           <p>Coloque a foto da Sua Receita</p>
         </div>
-      </div>
+      </label>
+      <input type="file" id="image-input" accept="image/*" hidden />
     </aside>
 
-    <!-- ======== PAINEL DE FORMULÁRIO ======== -->
+    <!-- FORMULÁRIO -->
     <section class="form-panel">
-      <!-- Título da Receita -->
-      <div class="field-group">
-        <label for="recipe-title" class="field-label">Nome da sua receita:</label>
-        <input
-          type="text"
-          id="recipe-title"
-          placeholder="Digite o nome da sua receita"
-        />
-      </div>
+      <form class="recipe-form" autocomplete="off">
 
-      <!-- Descrição Breve -->
-      <div class="field-group">
-        <label for="descricao" class="field-label">Descrição:</label>
-        <textarea
-          id="descricao"
-          placeholder="Adicione uma breve descrição ao final para sua receita"
-        ></textarea>
-      </div>
+        <div class="form-group">
+          <label for="recipe-title">Nome da sua receita:</label>
+          <input
+            type="text"
+            id="recipe-title"
+            placeholder="Digite o nome da sua receita"
+          />
+        </div>
 
-      <!-- Ingredientes -->
-      <div class="field-group">
-        <label for="ingredients" class="field-label">Ingredientes:</label>
-        <textarea
-          id="ingredients"
-          placeholder="Adicione seus ingredientes"
-        ></textarea>
-      </div>
+        <div class="form-group">
+          <label for="descricao">Descrição:</label>
+          <textarea
+            id="descricao"
+            placeholder="Adicione uma breve descrição ao final para sua receita"
+          ></textarea>
+        </div>
 
-      <!-- Modo de Preparo -->
-      <div class="field-group">
-        <label for="preparation" class="field-label">Modo de Preparo:</label>
-        <textarea
-          id="preparation"
-          placeholder="Adicione seu modo de preparo"
-        ></textarea>
-      </div>
+        <div class="form-group">
+          <label for="ingredients">Ingredientes:</label>
+          <textarea
+            id="ingredients"
+            placeholder="Adicione seus ingredientes"
+          ></textarea>
+        </div>
 
-      <!-- Botão Concluir -->
-      <button id="concluir-btn" type="button">Concluir</button>
+        <div class="form-group">
+          <label for="preparation">Modo de Preparo:</label>
+          <textarea
+            id="preparation"
+            placeholder="Adicione seu modo de preparo"
+          ></textarea>
+        </div>
+
+        <button type="button" id="concluir-btn">Concluir</button>
+      </form>
     </section>
+
   </main>
 
-  <!-- Caso você já tenha um cadastroReceita.js, basta mantê-lo -->
-  <script src="/assets/js/cadastroReceita.js"></script>
+  <!-- seu script.js (inalterado) -->
+  <script src="/assets/js/cadastroReceita.js" defer></script>
 </body>
 </html>

@@ -1,0 +1,224 @@
+/* ========================== RESET & FONT ========================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+ 
+  background: 
+  linear-gradient(
+      rgba(139, 51, 51, 0.144),  /* 60% de opacidade; ajuste para mais (ex: 0.7) ou menos (ex: 0.4) */
+      rgba(0, 0, 0, 0.274)
+    ),
+  url("/assets/img/madeitaRustica.png") center/cover no-repeat;
+  color: #ffffff;
+}
+
+/* ========================== HEADER ========================== */
+.site-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 40px;
+  background: #f0dca2;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo {
+  width: 60px;
+  object-fit: contain;
+}
+
+.search-wrapper {
+  flex: 1;
+  display: flex;
+}
+
+.search-wrapper input {
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  background: #d6c391;
+  font-size: 0.9rem;
+  color: #000000;
+}
+
+.main-nav a {
+  margin: 0 12px;
+  font-weight: 700;
+  color: #000000;
+  text-decoration: none;
+}
+
+.profile-btn {
+  margin-left: auto;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.profile-btn img {
+  width: 32px;
+  height: 32px;
+}
+
+/* ========================== LAYOUT ========================== */
+.content {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* ---------- Sidebar ---------- */
+.sidebar {
+  min-width: 220px;
+  margin-right: 40px;
+}
+
+.page-title {
+  font-family: "Anton", sans-serif;
+  font-size: 2rem;
+  margin-bottom: 24px;
+}
+
+.filter {
+  margin-bottom: 20px;
+}
+
+.filter-toggle {
+  width: 200px;
+  text-align: left;
+  background: #ffffff;
+  color: #000000;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.arrow {
+  transition: transform 0.3s;
+}
+
+.filter-list {
+  display: none;
+  list-style: none;
+  background: #ffffff;
+  color: #000000;
+  margin-top: 4px;
+  border-radius: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.filter-list li {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.filter-list li:hover {
+  background: #eeeeee;
+}
+
+/* Estados ativos */
+.filter-toggle.open .arrow {
+  transform: rotate(90deg);
+}
+
+.filter-toggle.open + .filter-list {
+  display: block;
+}
+
+.filter-list li.selected {
+  background: #d6c391;
+  font-weight: 700;
+}
+
+/* ---------- Cards de Receita ---------- */
+.recipes-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.recipe-card {
+  display: flex;
+  gap: 24px;
+  background: #3e3e3e;
+  border-radius: 8px;
+  padding: 24px;
+}
+
+.recipe-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.recipe-body {
+  flex: 1;
+}
+
+.recipe-title {
+  font-family: "Anton", sans-serif;
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.recipe-description {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin-bottom: 16px;
+}
+
+.recipe-meta {
+  display: flex;
+  gap: 24px;
+  font-size: 0.75rem;
+}
+
+.stars {
+  color: #ffd700; /* amarelo (estrelas) */
+  font-size: 0.9rem;
+}
+
+/* ========================== RESPONSIVO ========================== */
+@media (max-width: 768px) {
+  .content {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    margin-right: 0;
+    margin-bottom: 32px;
+  }
+
+  .filter-toggle {
+    width: 100%;
+  }
+
+  .recipe-card {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .recipe-image {
+    width: 100%;
+    height: auto;
+    max-width: 300px;
+  }
+}

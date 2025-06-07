@@ -8,17 +8,16 @@ const RECEITA_URL      = `${BASE_URL}/receita`;
 
 // Configuração do Azure Blob Storage
 const AZURE_ACCOUNT   = 'uploadreceita';
-const AZURE_CONTAINER = 'fotos'; // Ajuste para o nome exato do seu container no Azure
-const SAS_TOKEN       = 'sp=racwl&st=2025-06-03T18:39:57Z&se=2025-07-03T02:39:57Z&sv=2024-11-04&sr=c&sig=eiTLG0XfiGvXKR0Kn3zpFI8ATkPQ33cjV%2Bywkqrt%2Fm0%3D';
+const AZURE_CONTAINER = 'fotos';
+const SAS_TOKEN       = 'sp=racwl&st=2025-06-03T18:39:57Z&se=2025-07-03T02:39:57Z&sv=2024-11-04&sr=c&sig=…';
 
 // Chave usada em localStorage para armazenar a URL da última imagem enviada
 const STORAGE_KEY_IMAGEM_URL = 'ultimaImagemUrl';
 
-
-const userId = localStorage.getItem('userId');
+document.addEventListener('DOMContentLoaded', () => {
+  const userId = localStorage.getItem('userId');
   if (!userId) {
-    // Se não houver usuário logado, redireciona para a página de login
-    window.location.href = '../index.html';
+    window.location.href = '/index.html';
     return;
   }
 
@@ -26,10 +25,10 @@ const userId = localStorage.getItem('userId');
   carregarDificuldades();
   configurarUploadImagem(userId);
   configurarEnvioReceita(userId);
-
+});
 
 /**
- * Busca categorias no back-end e popula o primeiro <details>
+ * Busca categorias no back-end e preenche o primeiro <details>
  */
 async function carregarCategorias() {
   try {
@@ -37,10 +36,8 @@ async function carregarCategorias() {
     if (!resp.ok) throw new Error('Erro ao carregar categorias');
     const categorias = await resp.json();
 
-    const container = document.querySelector(
-      '.filter-detail:nth-of-type(1) .filter-options'
-    );
-    container.innerHTML = ''; // limpa opções estáticas
+    const container = document.querySelectorAll('.filter-options')[0];
+    container.innerHTML = '';
 
     categorias.forEach(cat => {
       const label = document.createElement('label');
@@ -59,7 +56,7 @@ async function carregarCategorias() {
 }
 
 /**
- * Busca níveis de dificuldade no back-end e popula o segundo <details>
+ * Busca níveis de dificuldade no back-end e preenche o segundo <details>
  */
 async function carregarDificuldades() {
   try {
@@ -67,10 +64,8 @@ async function carregarDificuldades() {
     if (!resp.ok) throw new Error('Erro ao carregar níveis de dificuldade');
     const niveis = await resp.json();
 
-    const container = document.querySelector(
-      '.filter-detail:nth-of-type(2) .filter-options'
-    );
-    container.innerHTML = ''; // limpa opções estáticas
+    const container = document.querySelectorAll('.filter-options')[1];
+    container.innerHTML = '';
 
     niveis.forEach(niv => {
       const label = document.createElement('label');
@@ -89,8 +84,7 @@ async function carregarDificuldades() {
 }
 
 /**
- * Configura o fluxo de upload da imagem para o Azure e armazena a URL em localStorage.
- * userId é usado para gerar um nome de blob único.
+ * Configura upload de imagem para Azure e preview imediato
  */
 function configurarUploadImagem(userId) {
   const imageInput       = document.getElementById('image-input');
@@ -101,16 +95,20 @@ function configurarUploadImagem(userId) {
     const file = imageInput.files[0];
     if (!file) return;
 
-    try {
-      // Faz o upload ao Azure e obtém a URL pública
-      const blobUrl = await uploadParaAzure(file, userId);
-
-      // Armazena a URL no localStorage para uso posterior
-      localStorage.setItem(STORAGE_KEY_IMAGEM_URL, blobUrl);
-
-      // Exibe preview da imagem no container
-      previewContainer.style.backgroundImage = `url('${blobUrl}')`;
+    // Preview imediato no front-end
+    const reader = new FileReader();
+    reader.onload = () => {
+      previewContainer.style.backgroundImage = `url('${reader.result}')`;
       placeholder.style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+
+    // Upload ao Azure
+    try {
+      const blobUrl = await uploadParaAzure(file, userId);
+      localStorage.setItem(STORAGE_KEY_IMAGEM_URL, blobUrl);
+      // Se preferir, você pode atualizar o preview para a URL definitiva:
+      // previewContainer.style.backgroundImage = `url('${blobUrl}')`;
     } catch (e) {
       console.error('Falha no upload:', e);
       placeholder.textContent = 'Erro ao enviar imagem';
@@ -119,13 +117,11 @@ function configurarUploadImagem(userId) {
 }
 
 /**
- * Envia o arquivo binário ao Azure Blob e retorna a URL pública do blob.
+ * Envia o binário ao Azure Blob e retorna a URL pública
  */
 async function uploadParaAzure(file, userId) {
-  // Gera um nome único para o blob: userId_timestamp_nomeOriginal
   const timestamp = Date.now();
   const blobName  = `${userId}_${timestamp}_${file.name}`;
-
   const uploadUrl = `https://${AZURE_ACCOUNT}.blob.core.windows.net/${AZURE_CONTAINER}/${blobName}?${SAS_TOKEN}`;
 
   const resposta = await fetch(uploadUrl, {
@@ -141,13 +137,11 @@ async function uploadParaAzure(file, userId) {
     throw new Error(`Azure retornou status ${resposta.status}`);
   }
 
-  // Retorna a URL pública sem SAS token
   return `https://${AZURE_ACCOUNT}.blob.core.windows.net/${AZURE_CONTAINER}/${blobName}`;
 }
 
 /**
- * Configura o botão “Concluir”: reúne todos os campos, a URL da imagem do localStorage
- * e envia o payload completo para o endpoint de criar receita.
+ * Configura botão Concluir: coleta dados, valida e envia ao back-end
  */
 function configurarEnvioReceita(userId) {
   const btnConcluir = document.getElementById('concluir-btn');
@@ -161,16 +155,13 @@ function configurarEnvioReceita(userId) {
 
     const categoriaRadio   = document.querySelector('input[name="category"]:checked');
     const dificuldadeRadio = document.querySelector('input[name="difficulty"]:checked');
+    const imagemUrl        = localStorage.getItem(STORAGE_KEY_IMAGEM_URL) || '';
 
-    // Recupera a URL da última imagem enviada ao Azure (se existir)
-    const imagemUrl = localStorage.getItem(STORAGE_KEY_IMAGEM_URL) || '';
-
-    // Validações mínimas
     if (
-      !titulo        ||
-      !descricao     ||
-      !ingredientes  ||
-      !modoPreparo   ||
+      !titulo ||
+      !descricao ||
+      !ingredientes ||
+      !modoPreparo ||
       !categoriaRadio ||
       !dificuldadeRadio ||
       !porcoes
@@ -179,7 +170,6 @@ function configurarEnvioReceita(userId) {
       return;
     }
 
-    // Monta o objeto a ser enviado
     const receitaPayload = {
       titulo,
       descricao,
@@ -189,7 +179,7 @@ function configurarEnvioReceita(userId) {
       categoriaId: Number(categoriaRadio.value),
       nivelDificuldadeId: Number(dificuldadeRadio.value),
       usuarioId: Number(userId),
-      imagemUrl // já está disponível no localStorage
+      imagemUrl
     };
 
     try {
@@ -204,13 +194,11 @@ function configurarEnvioReceita(userId) {
       });
 
       const data = await resp.json();
-      if (!resp.ok) {
-        throw new Error(data.message || 'Erro ao cadastrar receita');
-      }
+      if (!resp.ok) throw new Error(data.message || 'Erro ao cadastrar receita');
+
       alert('Receita cadastrada com sucesso!');
-      // Opcional: limpar localStorage ou campos após sucesso
       localStorage.removeItem(STORAGE_KEY_IMAGEM_URL);
-      // Aqui você pode limpar campos ou redirecionar, se quiser
+      // daqui você pode redirecionar ou limpar campos, se quiser
     } catch (e) {
       console.error(e);
       alert(`Falha ao cadastrar receita: ${e.message}`);
